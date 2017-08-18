@@ -2,30 +2,30 @@ math-captcha
 ======================
 виджет math-captcha
 
-Installation
+Установка
 ------------
 
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
+Предпочтительным способом установки этого расширения является [composer](http://getcomposer.org/download/).
 
-Either run
+Выполните
 
 ```
 php composer.phar require --prefer-dist lesha724/yii2-math-captcha "*"
 ```
 
-or add
+или добавьте
 
 ```
 "lesha724/yii2-math-captcha": "*"
 ```
 
-to the require section of your `composer.json` file.
+в блок require в вашем `composer.json` файле.
 
 
-Usage
+Использование
 -----
 
-Once the extension is installed, simply use it in your code by  :
+Как только расширение будет установлено, просто используйте его в своем коде  :
 
 ```php
 use yii\web\Controller;
@@ -40,11 +40,27 @@ class SiteController extends Controller
                 'class' => 'lesha724\MathCaptcha\MathCaptchaAction',
                 //'imageLibrary'=>'imagick', only 'gd' and 'imagick' 
                 'fixedVerifyCode' => YII_ENV_TEST ? '42' : null,
-                //don`t set foreColor and backColor (they is random color)
-                //more options http://www.yiiframework.com/doc-2.0/yii-captcha-captchaaction.html
+                //не задавайте значение foreColor и backColor (они заполняться случайными цветами)
+                //остльные опции http://www.yiiframework.com/doc-2.0/yii-captcha-captchaaction.html
             ],
         ];
     }
 }
+
+```
+
+```php
+
+<?php $form = ActiveForm::begin([]); ?>
+
+....
+
+<?= $form->field($model, 'verifyCode')->widget(\yii\captcha\Captcha::className(), [
+	'template' => '{image} {input}',
+]) ?>
+
+....
+
+<?php ActiveForm::end(); ?>
 
 ```
