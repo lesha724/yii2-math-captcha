@@ -2,6 +2,8 @@ math-captcha
 ======================
 виджет math-captcha
 
+![Пример](https://raw.githubusercontent.com/lesha724/yii2-math-captcha/master/img/example.PNG)
+
 Установка
 ------------
 
