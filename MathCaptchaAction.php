@@ -75,7 +75,7 @@ class MathCaptchaAction extends \yii\captcha\CaptchaAction
         // Рисуем линии на подстилке
         for ($i=0; $i<$this->_lineCount; $i++)
         {
-            $color = imagecolorallocate($image, rand(0, 150), rand(0, 100), rand(0, 150)); // Случайный цвет c изображения
+            $color = imagecolorallocate($image, rand(0, 255), rand(0, 255), rand(0, 255)); // Случайный цвет c изображения
             imageline($image, rand(0, 20), rand(1, 50), rand(150, 180), rand(1, 50), $color);
         }
 
@@ -87,7 +87,6 @@ class MathCaptchaAction extends \yii\captcha\CaptchaAction
         );*/
 
         //$foreColor = imagecolorallocate($image, rand(0, 150), rand(0, 100), rand(0, 150)); // Случайный цвет c изображения
-        $foreColor = imagecolorallocate($image, rand(150, 255), rand(100, 200), rand(150, 255));
         $length = strlen($code);
         $box = imagettfbbox(30, 0, $this->fontFile, $code);
         $w = $box[4] - $box[0] + $this->offset * ($length - 1);
@@ -96,20 +95,22 @@ class MathCaptchaAction extends \yii\captcha\CaptchaAction
         $x = 10;
         $y = round($this->height * 27 / 40);
         for ($i = 0; $i < $length; ++$i) {
-            $fontSize = (int) (rand(26, 32) * $scale * 0.8);
-            $angle = rand(-10, 10);
+            $foreColor = imagecolorallocate($image, rand(0, 255), rand(0, 255), rand(50, 255));
+
+            $fontSize = (int) (rand(24, 32) * $scale * 0.8);
+            $angle = rand(-20, 20);
             $letter = $code[$i];
             $box = imagettftext($image, $fontSize, $angle, $x, $y, $foreColor, $this->fontFile, $letter);
             $x = $box[2] + $this->offset;
         }
 
-        imagecolordeallocate($image, $foreColor);
+       // imagecolordeallocate($image, $foreColor);
 
 
         // Опять линии, уже сверху текста
         for ($i=0; $i<$this->_lineCount; $i++)
         {
-            $color = imagecolorallocate($image, rand(0, 255), rand(0, 200), rand(0, 255));
+            $color = imagecolorallocate($image, rand(0, 255), rand(0, 255), rand(0, 255));
             imageline($image, rand(0, 20), rand(1, 50), rand(150, 180), rand(1, 50), $color);
         }
 
@@ -128,8 +129,7 @@ class MathCaptchaAction extends \yii\captcha\CaptchaAction
     protected function renderImageByImagick($code)
     {
         //$backColor = $this->transparent ? new \ImagickPixel('transparent') : new \ImagickPixel('#' . str_pad(dechex($this->backColor), 6, 0, STR_PAD_LEFT));
-        $backColor = new \ImagickPixel(sprintf('rgb(%d,%d,%d)',rand(0, 120), rand(0, 120), rand(0, 125)));
-        $foreColor = new \ImagickPixel(sprintf('rgb(%d,%d,%d)',rand(120, 255), rand(120, 255), rand(120, 255)));
+        $backColor = new \ImagickPixel(sprintf('rgb(%d,%d,%d)',rand(0, 255), rand(0, 255), rand(0, 255)));
 
         $image = new \Imagick();
         $image->newImage($this->width, $this->height, $backColor);
@@ -138,7 +138,7 @@ class MathCaptchaAction extends \yii\captcha\CaptchaAction
 
         for ($i=0; $i<$this->_lineCount; $i++)
         {
-            $color =  new \ImagickPixel(sprintf('rgb(%d,%d,%d)',rand(0, 255), rand(0, 200), rand(0, 255)));
+            $color =  new \ImagickPixel(sprintf('rgb(%d,%d,%d)',rand(0, 255), rand(0, 255), rand(0, 255)));
             $draw->setStrokeColor($color);
             $draw->line(rand(0, 20), rand(1, 50), rand(150, 180), rand(1, 50));
         }
@@ -154,18 +154,19 @@ class MathCaptchaAction extends \yii\captcha\CaptchaAction
         $x = 10;
         $y = round($this->height * 27 / 40);
         for ($i = 0; $i < $length; ++$i) {
+            $foreColor = new \ImagickPixel(sprintf('rgb(%d,%d,%d)',rand(0, 255), rand(0, 255), rand(0, 255)));
             $draw = new \ImagickDraw();
             $draw->setFont($this->fontFile);
-            $draw->setFontSize((int) (rand(26, 32) * $scale * 0.8));
+            $draw->setFontSize((int) (rand(24, 32) * $scale * 0.8));
             $draw->setFillColor($foreColor);
-            $image->annotateImage($draw, $x, $y, rand(-10, 10), $code[$i]);
+            $image->annotateImage($draw, $x, $y, rand(-20, 20), $code[$i]);
             $fontMetrics = $image->queryFontMetrics($draw, $code[$i]);
             $x += (int) $fontMetrics['textWidth'] + $this->offset;
         }
 
         for ($i=0; $i<$this->_lineCount; $i++)
         {
-            $color =  new \ImagickPixel(sprintf('rgb(%d,%d,%d)',rand(0, 255), rand(0, 200), rand(0, 255)));
+            $color =  new \ImagickPixel(sprintf('rgb(%d,%d,%d)',rand(0, 255), rand(0, 255), rand(0, 255)));
             $draw->setStrokeColor($color);
             $draw->line(rand(0, 20), rand(1, 50), rand(150, 180), rand(1, 50));
         }
